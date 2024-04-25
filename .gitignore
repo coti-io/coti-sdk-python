@@ -1,0 +1,5 @@
+/compiled_contracts/
+.idea
+**.pyc
+.env
+.run/
