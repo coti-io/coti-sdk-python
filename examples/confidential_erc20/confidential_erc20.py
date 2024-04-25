@@ -67,24 +67,6 @@ def testing_functions(deployed_contract, eoa, account_hex_encryption_key, tx_par
     account_balance_at_end = test_transfer_input_text(account_balance_before, account_hex_encryption_key, alice_address,
                                                       deployed_contract, eoa, plaintext_integer, tx_params)
 
-    # bob_address = Account.from_key('0x48bd95ee72b683c16cb0852dd5659f9cbed331955685743ea960a2e3d0cd1317')
-    # bob_hex_encryption_key = bytes.fromhex('ff15d2a0902744ba1c4bc8550402261e')
-
-    # account_balance_before = test_transfer_clear_no_allowance(account_balance_before, account_hex_encryption_key,
-    #                                                           alice_address, deployed_contract, eoa, plaintext_integer,
-    #                                                           tx_params, bob_address)
-
-    # test_approve_clear(account_hex_encryption_key, deployed_contract, eoa, plaintext_integer, tx_params, bob_address)
-
-    # account_balance_before = test_transfer_from(account_balance_before, account_hex_encryption_key, alice_address,
-    #                                             deployed_contract, eoa, plaintext_integer, tx_params, bob_address,
-    #                                             bob_hex_encryption_key)
-    #
-    # account_balance_at_end = test_transfer_from_clear(account_balance_before, account_hex_encryption_key, alice_address,
-    #                                                   deployed_contract, eoa, plaintext_integer, tx_params)
-    #
-    # test_approve(account_hex_encryption_key, deployed_contract, eoa, tx_params)
-
     print('account balance at first: ', account_balance_at_first, ' account balance at end:', account_balance_at_end)
 
 
