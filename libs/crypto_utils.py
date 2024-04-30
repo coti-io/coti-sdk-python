@@ -139,7 +139,7 @@ def sign(message, key):
     return signature
 
 
-def prepare_IT(plaintext, user_aes_key, sender, contract, func_sig, signing_key):
+def build_input_text(plaintext, user_aes_key, sender, contract, func_sig, signing_key):
     sender_address_bytes = bytes.fromhex(sender.address[2:])
     contract_address_bytes = bytes.fromhex(contract.address[2:])
 

@@ -40,6 +40,14 @@ def main():
     if deployed_contract is None:
         deployed_contract = deploy_onboard_contract(tx_params)
 
+    decrypted_aes_key = onboard_for_aes_key(deployed_contract, eoa_private_key, tx_params)
+    env_value = set_hex_account_encryption_key(decrypted_aes_key.hex())
+    if env_value[0] is not True:
+        raise Exception('encryption key not saved in .env!')
+    print(env_value)
+
+
+def onboard_for_aes_key(deployed_contract, eoa_private_key, tx_params):
     # Generate new RSA key pair that is only used to encrypt back the account network key,
     # public key that sent to node, node will encrypt the account network key using public key
     # once its back client will decrypt using private key
@@ -52,10 +60,7 @@ def main():
     encrypted_user_aes_from_network = tx_receipt.logs[0].data[64:]
     # only the private key could decrypt the account secret key
     decrypted_aes_key = decrypt_rsa(private_key, encrypted_user_aes_from_network)
-    env_value = set_hex_account_encryption_key(decrypted_aes_key.hex())
-    if env_value[0] is not True:
-        raise Exception('encryption key not saved in .env!')
-    print(env_value)
+    return decrypted_aes_key
 
 
 def deploy_onboard_contract(tx_params):

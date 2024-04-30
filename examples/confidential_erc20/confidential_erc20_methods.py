@@ -6,8 +6,8 @@ def approve(deployed_contract, kwargs, plaintext_integer, account_hex_encryption
     func = deployed_contract.functions.approve(**kwargs)
     func_sig = get_function_signature(func.abi)
     hex_account_private_key = bytes.fromhex(eoa_private_key)
-    ct, signature = prepare_IT(plaintext_integer, account_hex_encryption_key, eoa, deployed_contract, func_sig,
-                               hex_account_private_key)
+    ct, signature = build_input_text(plaintext_integer, account_hex_encryption_key, eoa, deployed_contract, func_sig,
+                                     hex_account_private_key)
     kwargs['_itCT'] = ct
     kwargs['_itSignature'] = signature
     func = deployed_contract.functions.approve(**kwargs)
@@ -35,8 +35,8 @@ def transfer_from(deployed_contract, kwargs, eoa, account_hex_encryption_key, pl
     func = deployed_contract.functions.transferFrom(**kwargs)
     func_sig = get_function_signature(func.abi)
     hex_account_private_key = bytes.fromhex(account_private_key)
-    ct, signature = prepare_IT(plaintext_integer, account_hex_encryption_key, eoa, deployed_contract, func_sig,
-                               hex_account_private_key)
+    ct, signature = build_input_text(plaintext_integer, account_hex_encryption_key, eoa, deployed_contract, func_sig,
+                                     hex_account_private_key)
     kwargs['_itCT'] = ct
     kwargs['_itSignature'] = signature
     func = deployed_contract.functions.transferFrom(**kwargs)
@@ -49,8 +49,8 @@ def transfer_encrypted(deployed_contract, kwargs, eoa, account_hex_encryption_ke
     func = deployed_contract.functions.transfer(**kwargs)
     func_sig = get_function_signature(func.abi)
     hex_account_private_key = bytes.fromhex(eoa_private_key)
-    ct, signature = prepare_IT(plaintext_integer, account_hex_encryption_key, eoa, deployed_contract, func_sig,
-                               hex_account_private_key)
+    ct, signature = build_input_text(plaintext_integer, account_hex_encryption_key, eoa, deployed_contract, func_sig,
+                                     hex_account_private_key)
     kwargs['_itCT'] = ct
     kwargs['_itSignature'] = signature
     func = deployed_contract.functions.transfer(**kwargs)
