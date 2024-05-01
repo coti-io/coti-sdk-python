@@ -39,10 +39,29 @@ def get_contract_implementing_function(function_name):
             return contracts[contract]
 
 
+def test_user_key_failure(function_name, kwargs, expected_result1, get_result_function_name, tx_params,
+                          expected_result2=None,
+                          expected_result3=None, expected_result4=None):
+    private_key, public_key = generate_rsa_keypair()
+    signedEK = sign(public_key, bytes.fromhex("2e0834786285daccd064ca17f1654f67b4aef298acbb82cef9ec422fb4975622"))
+    contract = get_contract_implementing_function("userKeyTest")
+    func = getattr(contract.functions, "userKeyTest")
+    workaround = func.w3.eth.default_account
+    func.w3.eth.default_account = func.w3.eth.default_account.address
+    execution_reverted_error = False
+    try:
+        encrypted_user_key = func(*[public_key, signedEK]).call()
+    except Exception:
+        execution_reverted_error = True
+    assert execution_reverted_error
+    func.w3.eth.default_account = workaround
+
+
 def test_user_key(function_name, kwargs, expected_result1, get_result_function_name, tx_params, expected_result2=None,
                   expected_result3=None, expected_result4=None):
     private_key, public_key = generate_rsa_keypair()
-    signedEK = sign(public_key, bytes.fromhex("2e0834786285daccd064ca17f1654f67b4aef298acbb82cef9ec422fb4975622"))
+    # signedEK = sign(public_key, bytes.fromhex("2e0834786285daccd064ca17f1654f67b4aef298acbb82cef9ec422fb4975622"))
+    signedEK = sign(public_key, bytes.fromhex(tx_params['eoa_private_key']))
     contract = get_contract_implementing_function("userKeyTest")
     func = getattr(contract.functions, "userKeyTest")
     workaround = func.w3.eth.default_account
@@ -131,6 +150,8 @@ def run_tests(a, b, shift, bit, numBits, bool_a, bool_b, tx_params):
     test("notTest", {'a': bit}, not bit, "getBoolResult", tx_params)
     test_user_key("offboardToUserTest", {'a': a, 'addr': tx_params['web3'].eth.default_account.address},
                   a, "getCTs", tx_params)
+    test_user_key_failure("offboardToUserTest", {'a': a, 'addr': tx_params['web3'].eth.default_account.address},
+                          a, "getCTs", tx_params)
     test("randomTest", {}, last_random_value, "getRandom", tx_params)
     test("randomBoundedTest", {'numBits': numBits}, last_random_value, "getRandom", tx_params)
     test("booleanTest", {"a": bool_a, "b": bool_b, "bit": bit}, bool_a and bool_b,

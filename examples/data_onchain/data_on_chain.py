@@ -25,7 +25,7 @@ def main():
 
     basic_add_computation(deployed_contract, tx_params, eoa, account_hex_encryption_key, a + b)
     compute_add_with_different_account(eoa_private_key, gas_limit, gas_price_gwei, web3, deployed_contract, a + b)
-    make_sure_data_is_safe(eoa, web3, deployed_contract, tx_params, account_hex_encryption_key)
+    make_sure_data_is_safe(eoa, web3, deployed_contract, tx_params)
 
 
 def make_sure_data_is_safe(eoa, web3, deployed_contract, tx_params):
