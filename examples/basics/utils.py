@@ -66,7 +66,10 @@ def validate_minimum_balance(web3):
     balance = get_native_balance(web3)
     if balance == 0:
         if is_devnet():
-            raise Exception("Not enough balance!, head to discord faucet and getsome...")
+            raise Exception(
+                "Not enough balance!, head to discord faucet and getsome..." \
+                "https://discord.com/channels/386571547508473876/1235539223595978752 , ask the BOT:" \
+                "devnet " + str(web3.eth.default_account.address))
         raise Exception("Not enough balance!")
 
 
