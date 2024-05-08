@@ -12,7 +12,7 @@ def main():
                  'eoa_private_key': eoa_private_key}
     deployed_contract = deploy(account_hex_encryption_key, eoa, tx_params)
 
-    basic_get_value(deployed_contract, eoa)
+    basic_get_value(deployed_contract, eoa, web3)
     a = basic_clear_encrypt_decrypt(account_hex_encryption_key, deployed_contract, eoa, tx_params)
 
     some_other_aes_key = generate_aes_key()
@@ -281,9 +281,11 @@ def get_user_arithmetic_result(deployed_contract, eoa):
 
 # normal solidity view function to get a value that was saved,
 # in this case saved when the contract constructor was executed
-def basic_get_value(deployed_contract, eoa):
+def basic_get_value(deployed_contract, eoa, web3):
     some_value = deployed_contract.functions.getSomeValue().call({'from': eoa.address})
     assert some_value == 5
+    index_0_at_storage = int(web3.eth.get_storage_at(deployed_contract.address, 0).hex(), 16)
+    assert index_0_at_storage == 5
 
 
 def setUserSomeEncryptedValue(deployed_contract, kwargs, tx_params):
