@@ -67,67 +67,73 @@ In order to follow the transactions sent to the node, use the `web_socket.py` to
 
 There are two libraries located in the [libs](/libs/) folder that will allow you to interact with the COTI network.
 
-### Crypto Utilities (crypto_utils.py)
+### Crypto Utilities (crypto_utils.py) Functions
 
-#### Functions
+### 1. `encrypt(key, plaintext)`
 
-1. `encrypt(key, plaintext)`
+**Purpose:** Encrypts a plaintext message using AES encryption with a provided key.
 
-      **Purpose:** Encrypts a plaintext message using AES encryption with a provided key.
+**Usage:**
+```python
+ciphertext, r = encrypt(key, plaintext)
+```
 
-      **Usage:**
-      ```python
-      ciphertext, r = encrypt(key, plaintext)
-      ```
+**Parameters:**
+- `key`: A 128-bit (16-byte) AES key.
+- `plaintext`: The plaintext message to be encrypted. Must be 128 bits (16 bytes) or smaller.
 
-      **Parameters:**
-      - **key**: A 128-bit (16-byte) AES key.
-      - **plaintext**: The plaintext message to be encrypted. Must be 128 bits (16 bytes) or smaller.
+**Returns:**
+- `ciphertext`: The encrypted message.
+- `r`: The random value used during encryption.
 
-2. `decrypt(key, r, ciphertext)`
+### 2. `decrypt(key, r, ciphertext)`
 
-      **Purpose:** Decrypts a ciphertext message using AES decryption with a provided key and random value.
+**Purpose:** Decrypts a ciphertext message using AES decryption with a provided key and random value.
 
-      **Usage:**
-      ```python
-      plaintext = decrypt(key, r, ciphertext)
-      ```
+**Usage:**
+```python
+plaintext = decrypt(key, r, ciphertext)
+```
 
-      **Parameters:**
-      - **key**: A 128-bit (16-byte) AES key.
-      - **r**: The random value used during encryption.
-      - **ciphertext**: The encrypted message to be decrypted.
+**Parameters:**
+- `key`: A 128-bit (16-byte) AES key.
+- `r`: The random value used during encryption.
+- `ciphertext`: The encrypted message to be decrypted.
 
-3. `load_aes_key(file_path)`
+**Returns:**
+- `plaintext`: The decrypted message.
 
-      **Purpose:** Loads a 128-bit AES key from a file.
+### 3. `load_aes_key(file_path)`
 
-      **Usage:**
-      ```python
-      key = load_aes_key(file_path)
-      ```
+**Purpose:** Loads a 128-bit AES key from a file.
 
-      **Parameters:**
-      - **file_path**: Path to the file containing the hex-encoded AES key.
+**Usage:**
+```python
+key = load_aes_key(file_path)
+```
 
-4. `write_aes_key(file_path, key)`
+**Parameters:**
+- `file_path`: Path to the file containing the hex-encoded AES key.
 
-      **Purpose:** Writes a 128-bit AES key to a file in hex-encoded format.
+**Returns:**
+- `key`: The 128-bit AES key.
 
-      **Usage:**
+### 4. `write_aes_key(file_path, key)`
 
-      ```python
-      write_aes_key(file_path, key)
-      ```
+**Purpose:** Writes a 128-bit AES key to a file in hex-encoded format.
 
-      **Parameters:**
-      - **file_path**: Path to the file where the key will be written.
-      - **key**: The 128-bit AES key.
+**Usage:**
+```python
+write_aes_key(file_path, key)
+```
+
+**Parameters:**
+- `file_path`: Path to the file where the key will be written.
+- `key`: The 128-bit AES key.
 
 ### 5. `generate_aes_key()`
 
-**Purpose:**  
-Generates a random 128-bit AES key.
+**Purpose:** Generates a random 128-bit AES key.
 
 **Usage:**
 ```python
@@ -139,8 +145,7 @@ key = generate_aes_key()
 
 ### 6. `generate_ECDSA_private_key()`
 
-**Purpose:**  
-Generates a new ECDSA private key.
+**Purpose:** Generates a new ECDSA private key.
 
 **Usage:**
 ```python
@@ -152,8 +157,7 @@ private_key = generate_ECDSA_private_key()
 
 ### 7. `signIT(sender, addr, func_sig, ct, key)`
 
-**Purpose:**  
-Signs a message composed of various inputs using a private key.
+**Purpose:** Signs a message composed of various inputs using a private key.
 
 **Usage:**
 ```python
@@ -172,8 +176,7 @@ signature = signIT(sender, addr, func_sig, ct, key)
 
 ### 8. `sign(message, key)`
 
-**Purpose:**  
-Signs a message using a private key.
+**Purpose:** Signs a message using a private key.
 
 **Usage:**
 ```python
@@ -189,8 +192,7 @@ signature = sign(message, key)
 
 ### 9. `build_input_text(plaintext, user_aes_key, sender, contract, func_sig, signing_key)`
 
-**Purpose:**  
-Builds input text by encrypting the plaintext and signing it.
+**Purpose:** Builds input text by encrypting the plaintext and signing it.
 
 **Usage:**
 ```python
@@ -211,8 +213,7 @@ int_cipher_text, signature = build_input_text(plaintext, user_aes_key, sender, c
 
 ### 10. `generate_rsa_keypair()`
 
-**Purpose:**  
-Generates an RSA key pair.
+**Purpose:** Generates an RSA key pair.
 
 **Usage:**
 ```python
@@ -225,8 +226,7 @@ private_key_bytes, public_key_bytes = generate_rsa_keypair()
 
 ### 11. `encrypt_rsa(public_key_bytes, plaintext)`
 
-**Purpose:**  
-Encrypts plaintext using RSA encryption with a provided public key.
+**Purpose:** Encrypts plaintext using RSA encryption with a provided public key.
 
 **Usage:**
 ```python
@@ -242,8 +242,7 @@ ciphertext = encrypt_rsa(public_key_bytes, plaintext)
 
 ### 12. `decrypt_rsa(private_key_bytes, ciphertext)`
 
-**Purpose:**  
-Decrypts ciphertext using RSA decryption with a provided private key.
+**Purpose:** Decrypts ciphertext using RSA decryption with a provided private key.
 
 **Usage:**
 ```python
@@ -259,8 +258,7 @@ plaintext = decrypt_rsa(private_key_bytes, ciphertext)
 
 ### 13. `keccak256(data)`
 
-**Purpose:**  
-Computes the Keccak-256 hash of the provided data.
+**Purpose:** Computes the Keccak-256 hash of the provided data.
 
 **Usage:**
 ```python
@@ -275,8 +273,7 @@ hash_value = keccak256(data)
 
 ### 14. `get_func_sig(function_signature)`
 
-**Purpose:**  
-Computes the function signature hash using Keccak-256.
+**Purpose:** Computes the function signature hash using Keccak-256.
 
 **Usage:**
 ```python
@@ -289,6 +286,314 @@ func_sig_hash = get_func_sig(function_signature)
 **Returns:**
 - `func_sig_hash`: The first 4 bytes of the computed hash.
 
+### Utilities (utils.py) Functions
+
+### 1. `web3_connected(web3)`
+
+**Purpose:** Checks if the Web3 instance is connected.
+
+**Usage:**
+```python
+connected = web3_connected(web3)
+```
+
+**Parameters:**
+- `web3`: An instance of Web3.
+
+**Returns:**
+- `connected`: Boolean indicating if Web3 is connected.
+
+### 2. `print_network_details(web3)`
+
+**Purpose:** Prints the network details of the Web3 instance.
+
+**Usage:**
+```python
+print_network_details(web3)
+```
+
+**Parameters:**
+- `web3`: An instance of Web3.
+
+### 3. `print_account_details(web3)`
+
+**Purpose:** Prints the account details of the default account in the Web3 instance.
+
+**Usage:**
+```python
+print_account_details(web3)
+```
+
+**Parameters:**
+- `web3`: An instance of Web3.
+
+### 4. `init_web3(node_https_address, eoa, error_not_connected=True)`
+
+**Purpose:** Initializes the Web3 instance with the given node address and externally owned account (EOA).
+
+**Usage:**
+```python
+web3 = init_web3(node_https_address, eoa)
+```
+
+**Parameters:**
+- `node_https_address`: The HTTPS address of the Ethereum node.
+- `eoa`: The externally owned account.
+- `error_not_connected`: Boolean indicating whether to raise an error if not connected.
+
+**Returns:**
+- `web3`: The initialized Web3 instance.
+
+### 5. `get_eoa(account_private_key)`
+
+**Purpose:** Generates an externally owned account (EOA) from a private key.
+
+**Usage:**
+```python
+eoa = get_eoa(account_private_key)
+```
+
+**Parameters:**
+- `account_private_key`: The private key of the account.
+
+**Returns:**
+- `eoa`: The generated EOA.
+
+### 6. `validate_address(address)`
+
+**Purpose:** Validates and returns the checksum address for a given address.
+
+**Usage:**
+```python
+result = validate_address(address)
+```
+
+**Parameters:**
+- `address`: The address to be validated.
+
+**Returns:**
+- `result`: A dictionary with `valid` (boolean) and `safe` (checksum address).
+
+### 7. `get_latest_block(web3)`
+
+**Purpose:** Retrieves the latest block from the Ethereum network.
+
+**Usage:**
+```python
+latest_block = get_latest_block(web3)
+```
+
+**Parameters:**
+- `web3`: An instance of Web3.
+
+**Returns:**
+- `latest_block`: The latest block object.
+
+### 8. `get_nonce(web3)`
+
+**Purpose:** Retrieves the nonce for the default account.
+
+**Usage:**
+```python
+nonce = get_nonce(web3)
+```
+
+**Parameters:**
+- `web3`: An instance of Web3.
+
+**Returns:**
+- `nonce`: The nonce for the default account.
+
+### 9. `get_address_valid_and_checksum(address)`
+
+**Purpose:** Validates an address and returns the checksum address.
+
+**Usage:**
+```python
+result = get_address_valid_and_checksum(address)
+```
+
+**Parameters:**
+- `address`: The address to be validated.
+
+**Returns:**
+- `result`: A dictionary with `valid` (boolean) and `safe` (checksum address).
+
+### 10. `address_valid(address)`
+
+**Purpose:** Checks if an address is valid.
+
+**Usage:**
+```python
+valid = address_valid(address)
+```
+
+**Parameters:**
+- `address`: The address to be validated.
+
+**Returns:**
+- `valid`: Boolean indicating if the address is valid.
+
+### 11. `get_native_balance(web3, address=None)`
+
+**Purpose:** Retrieves the native balance of an address.
+
+**Usage:**
+```python
+balance = get_native_balance(web3, address)
+```
+
+**Parameters:**
+- `web3`: An instance of Web3.
+- `address`: The address to check the balance of (default is the default account).
+
+**Returns:**
+- `balance`: The native balance in wei.
+
+### 12. `load_contract(file_path)`
+
+**Purpose:** Loads a Solidity contract source code from a file.
+
+**Usage:**
+```python
+contract_code = load_contract(file_path)
+```
+
+**Parameters:**
+- `file_path`: Path to the Solidity source code file.
+
+**Returns:**
+- `contract_code`: The content of the file.
+
+### 13. `transfer_native(web3, recipient_address, private_key, amount_to_transfer_ether, native_gas_units)`
+
+**Purpose:** Transfers native cryptocurrency from the default account to a recipient address.
+
+**Usage:**
+```python
+tx_receipt = transfer_native(web3, recipient_address, private_key, amount_to_transfer_ether, native_gas_units)
+```
+
+**Parameters:**
+- `web3`: An instance of Web3.
+- `recipient_address`: The address of the recipient.
+- `private_key`: The private key of the sender.
+- `amount_to_transfer_ether`: The amount of Ether to transfer.
+- `native_gas_units`: The gas limit for the transaction.
+
+**Returns:**
+- `tx_receipt`: The transaction receipt.
+
+### 14. `validate_gas_estimation(web3, tx)`
+
+**Purpose:** Validates the gas estimation for a transaction.
+
+**Usage:**
+```python
+validate_gas_estimation(web3, tx)
+```
+
+**Parameters:**
+- `web3`: An instance of Web3.
+- `tx`: The transaction object.
+
+### 15. `is_gas_units_estimation_valid(web3, tx)`
+
+**Purpose:** Checks if the provided gas units are sufficient for the transaction.
+
+**Usage:**
+```python
+valid, gas_estimate = is_gas_units_estimation_valid(web3, tx)
+```
+
+**Parameters:**
+- `web3`: An instance of Web3.
+- `tx`: The transaction object.
+
+**Returns:**
+- `valid`: Boolean indicating if the gas units are sufficient.
+- `gas_estimate`: The estimated gas units.
+
+### 16. `get_function_signature(function_abi)`
+
+**Purpose:** Generates the function signature from the ABI.
+
+**Usage:**
+```python
+func_sig = get_function_signature(function_abi)
+```
+
+**Parameters:**
+- `function_abi`: The ABI of the function.
+
+**Returns:**
+- `func_sig`: The function signature.
+
+### 17. `deploy_contract(contract, kwargs, tx_params)`
+
+**Purpose:** Deploys a contract with the given parameters.
+
+**Usage:**
+```python
+tx_receipt = deploy_contract(contract, kwargs, tx_params)
+```
+
+**Parameters:**
+- `contract`: The contract object.
+- `kwargs`: Keyword arguments for the contract constructor.
+- `tx_params`: Transaction parameters.
+
+**Returns:**
+- `tx_receipt`: The transaction receipt.
+
+### 18. `exec_func_via_transaction(func, tx_params)`
+
+**Purpose:** Executes a contract function via a transaction.
+
+**Usage:**
+```python
+tx_receipt = exec_func_via_transaction(func, tx_params)
+```
+
+**Parameters:**
+- `func`: The contract function to be executed.
+- `tx_params`: Transaction parameters.
+
+**Returns:**
+- `tx_receipt`: The transaction receipt.
+
+### 19. `sign_and_send_tx(web3, private_key, transaction)`
+
+**Purpose:** Signs and sends a transaction.
+
+**Usage:**
+```python
+tx_receipt = sign_and_send_tx(web3, private_key, transaction)
+```
+
+**Parameters:**
+- `web3`: An instance of Web3.
+- `private_key`: The private key of the sender.
+- `transaction`: The transaction object.
+
+**Returns:**
+- `tx_receipt`: The transaction receipt.
+
+### 20. `decrypt_value(contract_value, user_key)`
+
+**Purpose:** Decrypts a value stored in a contract using a user key.
+
+**Usage:**
+```python
+decrypted_balance = decrypt_value(contract_value, user_key)
+```
+
+**Parameters:**
+- `contract_value`: The value to be decrypted.
+- `user_key`: The user's AES key.
+
+**Returns:**
+- `decrypted_balance`: The decrypted value.
 
 
 ## Pending enhancements
