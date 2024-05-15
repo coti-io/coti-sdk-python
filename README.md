@@ -73,8 +73,7 @@ There are two libraries located in the [libs](/libs/) folder that will allow you
 
 1. `encrypt(key, plaintext)`
 
-      **Purpose:**  
-      Encrypts a plaintext message using AES encryption with a provided key.
+      **Purpose:** Encrypts a plaintext message using AES encryption with a provided key.
 
       **Usage:**
       ```python
@@ -87,8 +86,7 @@ There are two libraries located in the [libs](/libs/) folder that will allow you
 
 2. `decrypt(key, r, ciphertext)`
 
-      **Purpose:**
-      Decrypts a ciphertext message using AES decryption with a provided key and random value.
+      **Purpose:** Decrypts a ciphertext message using AES decryption with a provided key and random value.
 
       **Usage:**
       ```python
@@ -99,6 +97,198 @@ There are two libraries located in the [libs](/libs/) folder that will allow you
       - **key**: A 128-bit (16-byte) AES key.
       - **r**: The random value used during encryption.
       - **ciphertext**: The encrypted message to be decrypted.
+
+3. `load_aes_key(file_path)`
+
+      **Purpose:** Loads a 128-bit AES key from a file.
+
+      **Usage:**
+      ```python
+      key = load_aes_key(file_path)
+      ```
+
+      **Parameters:**
+      - **file_path**: Path to the file containing the hex-encoded AES key.
+
+4. `write_aes_key(file_path, key)`
+
+      **Purpose:** Writes a 128-bit AES key to a file in hex-encoded format.
+
+      **Usage:**
+
+      ```python
+      write_aes_key(file_path, key)
+      ```
+
+      **Parameters:**
+      - **file_path**: Path to the file where the key will be written.
+      - **key**: The 128-bit AES key.
+
+### 5. `generate_aes_key()`
+
+**Purpose:**  
+Generates a random 128-bit AES key.
+
+**Usage:**
+```python
+key = generate_aes_key()
+```
+
+**Returns:**
+- `key`: The generated 128-bit AES key.
+
+### 6. `generate_ECDSA_private_key()`
+
+**Purpose:**  
+Generates a new ECDSA private key.
+
+**Usage:**
+```python
+private_key = generate_ECDSA_private_key()
+```
+
+**Returns:**
+- `private_key`: The raw bytes of the ECDSA private key.
+
+### 7. `signIT(sender, addr, func_sig, ct, key)`
+
+**Purpose:**  
+Signs a message composed of various inputs using a private key.
+
+**Usage:**
+```python
+signature = signIT(sender, addr, func_sig, ct, key)
+```
+
+**Parameters:**
+- `sender`: The sender's address.
+- `addr`: The contract address.
+- `func_sig`: The function signature.
+- `ct`: The ciphertext.
+- `key`: The private key used for signing.
+
+**Returns:**
+- `signature`: The generated signature.
+
+### 8. `sign(message, key)`
+
+**Purpose:**  
+Signs a message using a private key.
+
+**Usage:**
+```python
+signature = sign(message, key)
+```
+
+**Parameters:**
+- `message`: The message to be signed.
+- `key`: The private key used for signing.
+
+**Returns:**
+- `signature`: The generated signature.
+
+### 9. `build_input_text(plaintext, user_aes_key, sender, contract, func_sig, signing_key)`
+
+**Purpose:**  
+Builds input text by encrypting the plaintext and signing it.
+
+**Usage:**
+```python
+int_cipher_text, signature = build_input_text(plaintext, user_aes_key, sender, contract, func_sig, signing_key)
+```
+
+**Parameters:**
+- `plaintext`: The plaintext message.
+- `user_aes_key`: The user's AES key.
+- `sender`: The sender's address.
+- `contract`: The contract address.
+- `func_sig`: The function signature.
+- `signing_key`: The private key used for signing.
+
+**Returns:**
+- `int_cipher_text`: The integer representation of the ciphertext.
+- `signature`: The generated signature.
+
+### 10. `generate_rsa_keypair()`
+
+**Purpose:**  
+Generates an RSA key pair.
+
+**Usage:**
+```python
+private_key_bytes, public_key_bytes = generate_rsa_keypair()
+```
+
+**Returns:**
+- `private_key_bytes`: The serialized private key.
+- `public_key_bytes`: The serialized public key.
+
+### 11. `encrypt_rsa(public_key_bytes, plaintext)`
+
+**Purpose:**  
+Encrypts plaintext using RSA encryption with a provided public key.
+
+**Usage:**
+```python
+ciphertext = encrypt_rsa(public_key_bytes, plaintext)
+```
+
+**Parameters:**
+- `public_key_bytes`: The serialized public key.
+- `plaintext`: The plaintext message to be encrypted.
+
+**Returns:**
+- `ciphertext`: The encrypted message.
+
+### 12. `decrypt_rsa(private_key_bytes, ciphertext)`
+
+**Purpose:**  
+Decrypts ciphertext using RSA decryption with a provided private key.
+
+**Usage:**
+```python
+plaintext = decrypt_rsa(private_key_bytes, ciphertext)
+```
+
+**Parameters:**
+- `private_key_bytes`: The serialized private key.
+- `ciphertext`: The encrypted message to be decrypted.
+
+**Returns:**
+- `plaintext`: The decrypted message.
+
+### 13. `keccak256(data)`
+
+**Purpose:**  
+Computes the Keccak-256 hash of the provided data.
+
+**Usage:**
+```python
+hash_value = keccak256(data)
+```
+
+**Parameters:**
+- `data`: The data to be hashed.
+
+**Returns:**
+- `hash_value`: The computed hash.
+
+### 14. `get_func_sig(function_signature)`
+
+**Purpose:**  
+Computes the function signature hash using Keccak-256.
+
+**Usage:**
+```python
+func_sig_hash = get_func_sig(function_signature)
+```
+
+**Parameters:**
+- `function_signature`: The function signature string.
+
+**Returns:**
+- `func_sig_hash`: The first 4 bytes of the computed hash.
+
 
 
 ## Pending enhancements
