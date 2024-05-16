@@ -337,7 +337,7 @@ web3 = init_web3(node_https_address, eoa)
 ```
 
 **Parameters:**
-- `node_https_address`: The HTTPS address of the Ethereum node.
+- `node_https_address`: The HTTPS address of the COTI node.
 - `eoa`: The externally owned account.
 - `error_not_connected`: Boolean indicating whether to raise an error if not connected.
 
@@ -376,7 +376,7 @@ result = validate_address(address)
 
 ### 7. `get_latest_block(web3)`
 
-**Purpose:** Retrieves the latest block from the Ethereum network.
+**Purpose:** Retrieves the latest block from the COTI network.
 
 **Usage:**
 ```python
