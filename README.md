@@ -113,7 +113,7 @@ In order to follow the transactions sent to the node, use the `web_socket.py` to
 
 There are two libraries located in the [libs](/libs/) folder that will allow you to interact with the COTI network.
 
-### Crypto Utilities (crypto_utils.py) Functions
+# Crypto Utilities (crypto_utils.py) Functions
 
 ### 1. `encrypt(key, plaintext)`
 
@@ -332,7 +332,7 @@ func_sig_hash = get_func_sig(function_signature)
 **Returns:**
 - `func_sig_hash`: The first 4 bytes of the computed hash.
 
-### Utilities (utils.py) Functions
+# Utilities (utils.py) Functions
 
 ### 1. `web3_connected(web3)`
 
