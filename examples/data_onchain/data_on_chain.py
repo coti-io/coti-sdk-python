@@ -30,7 +30,7 @@ def main():
 
 def make_sure_data_is_safe(eoa, web3, deployed_contract, tx_params):
     some_other_contract_keeping_data = {"contract_name": "DataOnChain",
-                                        "address": "0x074695f49d9c788c056FbBc697669EE6F23AE796",
+                                        "address": "0xA4A3eed53ffAF6Cca3dA7EA4fc1AB630b377106C",
                                         "abi": [{"inputs": [], "stateMutability": "nonpayable", "type": "constructor"},
                                                 {"anonymous": false, "inputs": [
                                                     {"indexed": true, "internalType": "address", "name": "_from",

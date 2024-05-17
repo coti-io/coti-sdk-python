@@ -5,7 +5,7 @@ from examples.basics.utils import *
 false = False
 true = True
 
-devnet_onboard_contract = {"contract_name": "AccountOnboard", "address": "0x0eEb07792150D9B79F1bcE02Cd66f1329C2d2aD6",
+devnet_onboard_contract = {"contract_name": "AccountOnboard", "address": "0x5D49C3F49F19dc4e257975Fb1CcE057b3796f5F1",
                            "abi": [{"anonymous": false, "inputs": [
                                {"indexed": true, "internalType": "address", "name": "_from", "type": "address"},
                                {"indexed": false, "internalType": "bytes", "name": "userKey", "type": "bytes"}],
