@@ -1,9 +1,10 @@
-from setuptools import setup, find_packages
+
+from setuptools import setup
 
 setup(
-    name='coti-sdk',
-    description='COTI SDK for Confidential Preserving network',
-    version='0.1.0',
+    name='coti_sdk',
+    description='COTI SDK for Privacy Preserving Network',
+    version='0.1.7',
     license='Apache2.0',
     author="gmesika-coti@COTI",
     author_email='support@coti.io',

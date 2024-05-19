@@ -4,7 +4,7 @@ from eth_account import Account
 from web3 import Web3
 from web3.middleware import geth_poa_middleware
 
-from crypto_utils import block_size, decrypt
+from coti.crypto_utils import block_size, decrypt
 
 SOLC_VERSION = '0.8.19'
 
