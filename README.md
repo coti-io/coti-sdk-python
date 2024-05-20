@@ -4,7 +4,7 @@ All repositories specified below contain smart contracts that implement confiden
 The contracts provide examples for various use cases, such as Non-Fungible Tokens (NFTs), ERC20 tokens, Auction, and Identity management.
 
 These contracts demonstrate how to leverage the confidentiality features of the COTI V2 protocol to enhance privacy and security in decentralized applications.
-The contracts are of Solidity and can be compiled and deployed using popular development tools like Hardhat and Foundry (Work in progress).
+The contracts are written in Solidity and can be compiled and deployed using popular development tools like Hardhat and Foundry.
 
 #### Important Links:
 
@@ -46,7 +46,7 @@ The following contracts are available in each of the packages:
 
 # COTI v2 Python SDK
 
-The COTI Python SDK can be installed as pypi package named: `coti_sdk`, its modules are:
+The COTI Python SDK can be installed as pypi package named `coti_sdk`, its modules are:
 1. `crypto_utils`: used for cryptographic operations
 2. `utils` : used for web3 related operations
 
