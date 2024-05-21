@@ -8,7 +8,7 @@ The contracts are written in Solidity and can be compiled and deployed using pop
 
 #### Important Links:
 
-[Docs](https://docs.coti.io) | [Devnet Explorer](https://explorer-devnet.coti.io) | [Faucet](https://faucet.coti.io)
+[Docs](https://docs.coti.io) | [Devnet Explorer](https://explorer-devnet.coti.io) | [Discord](https://discord.gg/cuCykh8P4m) | [Faucet](https://faucet.coti.io)
 
 Interact with the network using any of the following:
 
@@ -42,7 +42,8 @@ The following contracts are available in each of the packages:
 
 ### Faucet
 
-🤖 To request devnet/testnet funds use our [faucet](https://faucet.coti.io)
+🤖 To request devnet/testnet funds use
+our [faucet](https://faucet.coti.io) ([join discord] (https://discord.gg/cuCykh8P4m)))
 
 # COTI v2 Python SDK
 
