@@ -9,6 +9,8 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.asymmetric import rsa
 from eth_keys import keys
+from array import array
+
 
 block_size = AES.block_size
 address_size = 20
@@ -83,32 +85,12 @@ def load_aes_key(file_path):
     return key
 
 
-def write_aes_key(file_path, key):
-    # Ensure the key is the correct length
-    if len(key) != block_size:
-        raise ValueError(f"Invalid key length: {len(key)} bytes, must be {block_size} bytes")
-
-    # Encode the key to hex string
-    hex_key = binascii.hexlify(key).decode()
-
-    # Write the hex-encoded key to the file
-    with open(file_path, 'w') as file:
-        file.write(hex_key)
-
 
 def generate_aes_key():
     # Generate a random 128-bit AES key
     key = get_random_bytes(block_size)
 
     return key
-
-
-def generate_ECDSA_private_key():
-    # Generate a new ECDSA private key
-    private_key = ECC.generate(curve='P-256')
-
-    # Get the raw bytes of the private key
-    return private_key.d.to_bytes(private_key.d.size_in_bytes(), byteorder='big')
 
 
 def sign_input_text(sender, addr, func_sig, ct, key):
@@ -160,6 +142,15 @@ def build_input_text(plaintext, user_aes_key, sender, contract, func_sig, signin
 
     return int_cipher_text, signature
 
+def build_string_input_text(plaintext, user_aes_key, sender, contract, func_sig, signing_key):
+    encoded_plaintext = array('B', plaintext.encode('utf-8'))
+    encrypted_str = [{'ciphertext': 0, 'signature': b''} for _ in range(len(encoded_plaintext))]
+    for i in range(len(encoded_plaintext)):
+        ct_int, signature = build_input_text(int(encoded_plaintext[i]), user_aes_key, sender, contract,
+                                             func_sig, signing_key)
+        encrypted_str[i] = {'ciphertext': ct_int, 'signature': signature}
+
+    return encrypted_str
 
 def generate_rsa_keypair():
     # Generate RSA key pair
@@ -184,20 +175,6 @@ def generate_rsa_keypair():
 
     return private_key_bytes, public_key_bytes
 
-
-def encrypt_rsa(public_key_bytes, plaintext):
-    # Load public key
-    public_key = serialization.load_der_public_key(public_key_bytes)
-    # Encrypt plaintext
-    ciphertext = public_key.encrypt(
-        plaintext,
-        padding.OAEP(
-            mgf=padding.MGF1(algorithm=hashes.SHA256()),
-            algorithm=hashes.SHA256(),
-            label=None
-        )
-    )
-    return ciphertext
 
 
 def decrypt_rsa(private_key_bytes, ciphertext):
