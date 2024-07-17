@@ -47,6 +47,10 @@ our [faucet](https://faucet.coti.io) ([join discord] (https://discord.gg/cuCykh8
 
 # COTI v2 Python SDK
 
+> [!NOTE]
+> Please refer to the latest [tags](https://github.com/coti-io/coti-sdk-python/tags) to find the most stable version to use. 
+> All tagged versions are available to install via [pypi](https://pypi.org/project/coti-sdk/)
+
 The COTI Python SDK can be installed as pypi package named `coti_sdk`, its modules are:
 1. `crypto_utils`: used for cryptographic operations
 2. `utils` : used for web3 related operations
