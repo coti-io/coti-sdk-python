@@ -152,6 +152,36 @@ def build_string_input_text(plaintext, user_aes_key, sender, contract, func_sig,
 
     return encrypted_str
 
+def decrypt_uint(contract_value, user_key):
+    # Convert ct to bytes (big-endian)
+    byte_array = contract_value.to_bytes(32, byteorder='big')
+
+    # Split ct into two 128-bit arrays r and cipher
+    cipher = byte_array[:block_size]
+    r = byte_array[block_size:]
+
+    # Decrypt the cipher
+    decrypted_message = decrypt(user_key, r, cipher)
+
+    # Print the decrypted cipher
+    decrypted_balance = int.from_bytes(decrypted_message, 'big')
+
+    return decrypted_balance
+
+def decrypt_string(contract_value, user_key):
+    string_from_input_tx = ""
+    for input_text_from_tx in contract_value:
+        decrypted_input_from_tx = decrypt_uint(input_text_from_tx, user_key)
+        byte_length = (decrypted_input_from_tx.bit_length() + 7) // 8  # calculate the byte length
+
+        # Convert the integer to bytes
+        decrypted_bytes = decrypted_input_from_tx.to_bytes(byte_length, byteorder='big')
+
+        # Decode the bytes to a string
+        string_from_input_tx += decrypted_bytes.decode('utf-8')
+
+    return string_from_input_tx
+
 def generate_rsa_keypair():
     # Generate RSA key pair
     private_key = rsa.generate_private_key(
