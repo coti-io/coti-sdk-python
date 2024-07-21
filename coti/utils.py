@@ -4,8 +4,6 @@ from eth_account import Account
 from web3 import Web3
 from web3.middleware import geth_poa_middleware
 
-from coti.crypto_utils import block_size, decrypt
-
 SOLC_VERSION = '0.8.19'
 
 
@@ -157,34 +155,3 @@ def sign_and_send_tx(web3, private_key, transaction):
     except Exception as e:
         raise Exception(f"Failed to wait for the transaction receipt: {e}")
     return tx_receipt
-
-
-def decrypt_uint(contract_value, user_key):
-    # Convert ct to bytes (big-endian)
-    byte_array = contract_value.to_bytes(32, byteorder='big')
-
-    # Split ct into two 128-bit arrays r and cipher
-    cipher = byte_array[:block_size]
-    r = byte_array[block_size:]
-
-    # Decrypt the cipher
-    decrypted_message = decrypt(user_key, r, cipher)
-
-    # Print the decrypted cipher
-    decrypted_balance = int.from_bytes(decrypted_message, 'big')
-
-    return decrypted_balance
-
-def decrypt_string(contract_value, user_key):
-    string_from_input_tx = ""
-    for input_text_from_tx in contract_value:
-        decrypted_input_from_tx = decrypt_uint(input_text_from_tx, user_key)
-        byte_length = (decrypted_input_from_tx.bit_length() + 7) // 8  # calculate the byte length
-
-        # Convert the integer to bytes
-        decrypted_bytes = decrypted_input_from_tx.to_bytes(byte_length, byteorder='big')
-
-        # Decode the bytes to a string
-        string_from_input_tx += decrypted_bytes.decode('utf-8')
-
-    return string_from_input_tx
