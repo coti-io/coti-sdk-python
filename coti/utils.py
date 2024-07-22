@@ -136,7 +136,7 @@ def exec_func_via_transaction(func, tx_params):
         'gas': gas_limit,
         'gasPrice': web3.to_wei(gas_price_gwei, 'gwei')
     })
-    # validate_gas_estimation(web3, tx)
+    validate_gas_estimation(web3, tx)
     tx_receipt = sign_and_send_tx(web3, account_private_key, tx)
     return tx_receipt
 
