@@ -32,6 +32,7 @@ jobs:
 
   pypi-publish:
     runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/main' }}
     needs:
       - release-build
     permissions:
