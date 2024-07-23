@@ -335,6 +335,44 @@ func_sig_hash = get_func_sig(function_signature)
 
 - `func_sig_hash`: The first 4 bytes of the computed hash.
 
+### 15. `decrypt_uint(ciphertext, user_key)`
+
+**Purpose:** Decrypts a value stored in a contract using a user key
+
+**Usage:**
+
+```python
+plaintext = decrypt_uint(ciphertext, user_key)
+```
+
+**Parameters:**
+
+- `ciphertext`: The value to be decrypted.
+- `userKey`: The user's AES key.
+
+**Returns:**
+
+- `result`: The decrypted value.
+
+### 16. `decrypt_string(ciphertext, user_key)`
+
+**Purpose:** Decrypts a value stored in a contract using a user key
+
+**Usage:**
+
+```python
+plaintext = decrypt_string(ciphertext, user_key)
+```
+
+**Parameters:**
+
+- `ciphertext`: The value to be decrypted.
+- `userKey`: The user's AES key.
+
+**Returns:**
+
+- `result`: The decrypted value.
+
 # Utilities (utils.py) Functions
 
 ### 1. `web3_connected(web3)`
