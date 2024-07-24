@@ -34,7 +34,6 @@ jobs:
           git commit -m "Update setup.py version to $TAG_NAME"
           git tag -f $TAG_NAME
           git push --force origin $TAG_NAME
-          git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
