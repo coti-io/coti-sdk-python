@@ -4,7 +4,7 @@ from setuptools import setup
 setup(
     name='coti_sdk',
     description='COTI SDK for Privacy Preserving Network',
-    version='0.1.10',
+    version='v0.1.14',
     license='Apache2.0',
     author="gmesika-coti@COTI",
     author_email='support@coti.io',
