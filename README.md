@@ -1,10 +1,14 @@
 # COTI V2 Confidentiality Preserving L2 | SDKs and Examples
 
-All repositories specified below contain smart contracts that implement confidentiality features using the COTI V2 protocol.
-The contracts provide examples for various use cases, such as Non-Fungible Tokens (NFTs), ERC20 tokens, Auction, and Identity management.
+All repositories specified below contain smart contracts that implement confidentiality features using the COTI V2
+protocol.
+The contracts provide examples for various use cases, such as Non-Fungible Tokens (NFTs), ERC20 tokens, Auction, and
+Identity management.
 
-These contracts demonstrate how to leverage the confidentiality features of the COTI V2 protocol to enhance privacy and security in decentralized applications.
-The contracts are written in Solidity and can be compiled and deployed using popular development tools like Hardhat and Foundry.
+These contracts demonstrate how to leverage the confidentiality features of the COTI V2 protocol to enhance privacy and
+security in decentralized applications.
+The contracts are written in Solidity and can be compiled and deployed using popular development tools like Hardhat and
+Foundry.
 
 #### Important Links:
 
@@ -48,14 +52,20 @@ our [faucet](https://faucet.coti.io) ([join discord] (https://discord.gg/cuCykh8
 # COTI v2 Python SDK
 
 > [!NOTE]
-> Please refer to the latest [tags](https://github.com/coti-io/coti-sdk-python/tags) to find the most stable version to use. 
+> Please refer to the latest [tags](https://github.com/coti-io/coti-sdk-python/tags) to find the most stable version to
+> use.
 > All tagged versions are available to install via [pypi](https://pypi.org/project/coti-sdk/)
 
 The COTI Python SDK can be installed as pypi package named `coti_sdk`, its modules are:
+
 1. `crypto_utils`: used for cryptographic operations
 2. `utils` : used for web3 related operations
 
-The [Python script examples](https://github.com/coti-io/coti-sdk-python-examples) project contain scripts covering various use cases, such as Non-Fungible Tokens (NFTs), ERC20 tokens, Auctions, and Identity management. It contains smart contracts that implement confidentiality features using the COTI V2 protocol. These contracts demonstrate how to leverage the confidentiality features of the COTI V2 protocol to implement privacy and enhance security in decentralized applications.
+The [Python script examples](https://github.com/coti-io/coti-sdk-python-examples) project contain scripts covering
+various use cases, such as Non-Fungible Tokens (NFTs), ERC20 tokens, Auctions, and Identity management. It contains
+smart contracts that implement confidentiality features using the COTI V2 protocol. These contracts demonstrate how to
+leverage the confidentiality features of the COTI V2 protocol to implement privacy and enhance security in decentralized
+applications.
 
 ## Getting initial funds from the COTI Faucet
 

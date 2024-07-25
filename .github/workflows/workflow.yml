@@ -2,10 +2,10 @@ name: COTI python SDK publish
 
 on:
   release:
-    types: [created]
+    types: [ created ]
   workflow_dispatch:
   pull_request:
-    types: [review_requested]
+    types: [ review_requested ]
 
 jobs:
 
@@ -58,7 +58,7 @@ jobs:
     environment:
       name: python-release-env
       url: https://github.com
-      
+
     steps:
       - name: Retrieve release distributions
         uses: actions/download-artifact@v4

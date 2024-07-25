@@ -1,16 +1,14 @@
 import binascii
+from array import array
 
 from Crypto.Cipher import AES
 from Crypto.Hash import keccak
-from Crypto.PublicKey import ECC
 from Crypto.Random import get_random_bytes
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.asymmetric import rsa
 from eth_keys import keys
-from array import array
-
 
 block_size = AES.block_size
 address_size = 20
@@ -85,7 +83,6 @@ def load_aes_key(file_path):
     return key
 
 
-
 def generate_aes_key():
     # Generate a random 128-bit AES key
     key = get_random_bytes(block_size)
@@ -142,6 +139,7 @@ def build_input_text(plaintext, user_aes_key, sender, contract, func_sig, signin
 
     return int_cipher_text, signature
 
+
 def build_string_input_text(plaintext, user_aes_key, sender, contract, func_sig, signing_key):
     encoded_plaintext = array('B', plaintext.encode('utf-8'))
     encrypted_str = [{'ciphertext': 0, 'signature': b''} for _ in range(len(encoded_plaintext))]
@@ -151,6 +149,7 @@ def build_string_input_text(plaintext, user_aes_key, sender, contract, func_sig,
         encrypted_str[i] = {'ciphertext': ct_int, 'signature': signature}
 
     return encrypted_str
+
 
 def decrypt_uint(ciphertext, user_key):
     # Convert ct to bytes (big-endian)
@@ -168,6 +167,7 @@ def decrypt_uint(ciphertext, user_key):
 
     return decrypted_uint
 
+
 def decrypt_string(ciphertext, user_key):
     string_from_input_tx = ""
     for input_text_from_tx in ciphertext:
@@ -181,6 +181,7 @@ def decrypt_string(ciphertext, user_key):
         string_from_input_tx += decrypted_bytes.decode('utf-8')
 
     return string_from_input_tx
+
 
 def generate_rsa_keypair():
     # Generate RSA key pair
@@ -204,7 +205,6 @@ def generate_rsa_keypair():
     )
 
     return private_key_bytes, public_key_bytes
-
 
 
 def decrypt_rsa(private_key_bytes, ciphertext):
