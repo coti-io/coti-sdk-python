@@ -130,40 +130,7 @@ plaintext = decrypt(key, r, ciphertext)
 
 - `plaintext`: The decrypted message.
 
-### 3. `load_aes_key(file_path)`
-
-**Purpose:** Loads a 128-bit AES key from a file.
-
-**Usage:**
-
-```python
-key = load_aes_key(file_path)
-```
-
-**Parameters:**
-
-- `file_path`: Path to the file containing the hex-encoded AES key.
-
-**Returns:**
-
-- `key`: The 128-bit AES key.
-
-### 4. `write_aes_key(file_path, key)`
-
-**Purpose:** Writes a 128-bit AES key to a file in hex-encoded format.
-
-**Usage:**
-
-```python
-write_aes_key(file_path, key)
-```
-
-**Parameters:**
-
-- `file_path`: Path to the file where the key will be written.
-- `key`: The 128-bit AES key.
-
-### 5. `generate_aes_key()`
+### 3. `generate_aes_key()`
 
 **Purpose:** Generates a random 128-bit AES key.
 
@@ -177,7 +144,7 @@ key = generate_aes_key()
 
 - `key`: The generated 128-bit AES key.
 
-### 6. `generate_ECDSA_private_key()`
+### 4. `generate_ECDSA_private_key()`
 
 **Purpose:** Generates a new ECDSA private key.
 
@@ -191,7 +158,7 @@ private_key = generate_ECDSA_private_key()
 
 - `private_key`: The raw bytes of the ECDSA private key.
 
-### 7. `signIT(sender, addr, func_sig, ct, key)`
+### 5. `signIT(sender, addr, func_sig, ct, key)`
 
 **Purpose:** Signs a message composed of various inputs using a private key.
 
@@ -213,7 +180,7 @@ signature = signIT(sender, addr, func_sig, ct, key)
 
 - `signature`: The generated signature.
 
-### 8. `sign(message, key)`
+### 6. `sign(message, key)`
 
 **Purpose:** Signs a message using a private key.
 
@@ -232,7 +199,7 @@ signature = sign(message, key)
 
 - `signature`: The generated signature.
 
-### 9. `build_input_text(plaintext, user_aes_key, sender, contract, func_sig, signing_key)`
+### 7. `build_input_text(plaintext, user_aes_key, sender, contract, func_sig, signing_key)`
 
 **Purpose:** Builds input text by encrypting the plaintext and signing it.
 
@@ -256,7 +223,7 @@ int_cipher_text, signature = build_input_text(plaintext, user_aes_key, sender, c
 - `int_cipher_text`: The integer representation of the ciphertext.
 - `signature`: The generated signature.
 
-### 10. `generate_rsa_keypair()`
+### 8. `generate_rsa_keypair()`
 
 **Purpose:** Generates an RSA key pair.
 
@@ -271,7 +238,7 @@ private_key_bytes, public_key_bytes = generate_rsa_keypair()
 - `private_key_bytes`: The serialized private key.
 - `public_key_bytes`: The serialized public key.
 
-### 11. `encrypt_rsa(public_key_bytes, plaintext)`
+### 9. `encrypt_rsa(public_key_bytes, plaintext)`
 
 **Purpose:** Encrypts plaintext using RSA encryption with a provided public key.
 
@@ -290,7 +257,7 @@ ciphertext = encrypt_rsa(public_key_bytes, plaintext)
 
 - `ciphertext`: The encrypted message.
 
-### 12. `decrypt_rsa(private_key_bytes, ciphertext)`
+### 10. `decrypt_rsa(private_key_bytes, ciphertext)`
 
 **Purpose:** Decrypts ciphertext using RSA decryption with a provided private key.
 
@@ -309,7 +276,7 @@ plaintext = decrypt_rsa(private_key_bytes, ciphertext)
 
 - `plaintext`: The decrypted message.
 
-### 13. `keccak256(data)`
+### 11. `keccak256(data)`
 
 **Purpose:** Computes the Keccak-256 hash of the provided data.
 
@@ -327,7 +294,7 @@ hash_value = keccak256(data)
 
 - `hash_value`: The computed hash.
 
-### 14. `get_func_sig(function_signature)`
+### 12. `get_func_sig(function_signature)`
 
 **Purpose:** Computes the function signature hash using Keccak-256.
 
@@ -345,7 +312,7 @@ func_sig_hash = get_func_sig(function_signature)
 
 - `func_sig_hash`: The first 4 bytes of the computed hash.
 
-### 15. `decrypt_uint(ciphertext, user_key)`
+### 13. `decrypt_uint(ciphertext, user_key)`
 
 **Purpose:** Decrypts a value stored in a contract using a user key
 
@@ -364,7 +331,7 @@ plaintext = decrypt_uint(ciphertext, user_key)
 
 - `result`: The decrypted value.
 
-### 16. `decrypt_string(ciphertext, user_key)`
+### 14. `decrypt_string(ciphertext, user_key)`
 
 **Purpose:** Decrypts a value stored in a contract using a user key
 

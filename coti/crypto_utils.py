@@ -68,21 +68,6 @@ def decrypt(key, r, ciphertext):
     return plaintext
 
 
-def load_aes_key(file_path):
-    # Read the hex-encoded contents of the file
-    with open(file_path, 'r') as file:
-        hex_key = file.read().strip()
-
-    # Decode the hex string to binary
-    key = binascii.unhexlify(hex_key)
-
-    # Ensure the key is the correct length
-    if len(key) != block_size:
-        raise ValueError(f"Invalid key length: {len(key)} bytes, must be {block_size} bytes")
-
-    return key
-
-
 def generate_aes_key():
     # Generate a random 128-bit AES key
     key = get_random_bytes(block_size)
