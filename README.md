@@ -199,14 +199,14 @@ signature = sign(message, key)
 
 - `signature`: The generated signature.
 
-### 7. `build_input_text(plaintext, user_aes_key, sender, contract, func_sig, signing_key)`
+### 7. `build_input_text(plaintext, user_aes_key, sender, contract, func_selector, signing_key)`
 
 **Purpose:** Builds input text by encrypting the plaintext and signing it.
 
 **Usage:**
 
 ```python
-int_cipher_text, signature = build_input_text(plaintext, user_aes_key, sender, contract, func_sig, signing_key)
+int_cipher_text, signature = build_input_text(plaintext, user_aes_key, sender, contract, func_selector, signing_key)
 ```
 
 **Parameters:**
@@ -215,7 +215,7 @@ int_cipher_text, signature = build_input_text(plaintext, user_aes_key, sender, c
 - `user_aes_key`: The user's AES key.
 - `sender`: The sender's address.
 - `contract`: The contract address.
-- `func_sig`: The function signature.
+- `func_selector`: The function selector.
 - `signing_key`: The private key used for signing.
 
 **Returns:**
@@ -223,14 +223,14 @@ int_cipher_text, signature = build_input_text(plaintext, user_aes_key, sender, c
 - `int_cipher_text`: The integer representation of the ciphertext.
 - `signature`: The generated signature.
 
-### 8. `build_string_input_text(plaintext, user_aes_key, sender, contract, func_sig, signing_key)`
+### 8. `build_string_input_text(plaintext, user_aes_key, sender, contract, func_selector, signing_key)`
 
 **Purpose:** Builds input text by encrypting the plaintext and signing it.
 
 **Usage:**
 
 ```python
-int_cipher_text, signature = build_string_input_text(plaintext, user_aes_key, sender, contract, func_sig, signing_key)
+int_cipher_text, signature = build_string_input_text(plaintext, user_aes_key, sender, contract, func_selector, signing_key)
 ```
 
 **Parameters:**
@@ -239,7 +239,7 @@ int_cipher_text, signature = build_string_input_text(plaintext, user_aes_key, se
 - `user_aes_key`: The user's AES key.
 - `sender`: The sender's address.
 - `contract`: The contract address.
-- `func_sig`: The function signature.
+- `func_selector`: The function selector.
 - `signing_key`: The private key used for signing.
 
 **Returns:**
@@ -299,43 +299,7 @@ plaintext = decrypt_rsa(private_key_bytes, ciphertext)
 
 - `plaintext`: The decrypted message.
 
-### 12. `keccak256(data)`
-
-**Purpose:** Computes the Keccak-256 hash of the provided data.
-
-**Usage:**
-
-```python
-hash_value = keccak256(data)
-```
-
-**Parameters:**
-
-- `data`: The data to be hashed.
-
-**Returns:**
-
-- `hash_value`: The computed hash.
-
-### 13. `get_func_sig(function_signature)`
-
-**Purpose:** Computes the function signature hash using Keccak-256.
-
-**Usage:**
-
-```python
-func_sig_hash = get_func_sig(function_signature)
-```
-
-**Parameters:**
-
-- `function_signature`: The function signature string.
-
-**Returns:**
-
-- `func_sig_hash`: The first 4 bytes of the computed hash.
-
-### 14. `decrypt_uint(ciphertext, user_key)`
+### 12. `decrypt_uint(ciphertext, user_key)`
 
 **Purpose:** Decrypts a value stored in a contract using a user key
 
@@ -354,7 +318,7 @@ plaintext = decrypt_uint(ciphertext, user_key)
 
 - `result`: The decrypted value.
 
-### 15. `decrypt_string(ciphertext, user_key)`
+### 13. `decrypt_string(ciphertext, user_key)`
 
 **Purpose:** Decrypts a value stored in a contract using a user key
 
@@ -643,25 +607,7 @@ valid, gas_estimate = is_gas_units_estimation_valid(web3, tx)
 - `valid`: Boolean indicating if the gas units are sufficient.
 - `gas_estimate`: The estimated gas units.
 
-### 16. `get_function_signature(function_abi)`
-
-**Purpose:** Generates the function signature from the ABI.
-
-**Usage:**
-
-```python
-func_sig = get_function_signature(function_abi)
-```
-
-**Parameters:**
-
-- `function_abi`: The ABI of the function.
-
-**Returns:**
-
-- `func_sig`: The function signature.
-
-### 17. `deploy_contract(contract, kwargs, tx_params)`
+### 16. `deploy_contract(contract, kwargs, tx_params)`
 
 **Purpose:** Deploys a contract with the given parameters.
 
@@ -681,7 +627,7 @@ tx_receipt = deploy_contract(contract, kwargs, tx_params)
 
 - `tx_receipt`: The transaction receipt.
 
-### 18. `exec_func_via_transaction(func, tx_params)`
+### 17. `exec_func_via_transaction(func, tx_params)`
 
 **Purpose:** Executes a contract function via a transaction.
 
@@ -700,7 +646,7 @@ tx_receipt = exec_func_via_transaction(func, tx_params)
 
 - `tx_receipt`: The transaction receipt.
 
-### 19. `sign_and_send_tx(web3, private_key, transaction)`
+### 18. `sign_and_send_tx(web3, private_key, transaction)`
 
 **Purpose:** Signs and sends a transaction.
 
@@ -720,7 +666,7 @@ tx_receipt = sign_and_send_tx(web3, private_key, transaction)
 
 - `tx_receipt`: The transaction receipt.
 
-### 20. `decrypt_value(contract_value, user_key)`
+### 19. `decrypt_value(contract_value, user_key)`
 
 **Purpose:** Decrypts a value stored in a contract using a user key.
 
