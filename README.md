@@ -223,7 +223,30 @@ int_cipher_text, signature = build_input_text(plaintext, user_aes_key, sender, c
 - `int_cipher_text`: The integer representation of the ciphertext.
 - `signature`: The generated signature.
 
-### 8. `generate_rsa_keypair()`
+### 8. `build_string_input_text(plaintext, user_aes_key, sender, contract, func_sig, signing_key)`
+
+**Purpose:** Builds input text by encrypting the plaintext and signing it.
+
+**Usage:**
+
+```python
+int_cipher_text, signature = build_string_input_text(plaintext, user_aes_key, sender, contract, func_sig, signing_key)
+```
+
+**Parameters:**
+
+- `plaintext`: The plaintext message.
+- `user_aes_key`: The user's AES key.
+- `sender`: The sender's address.
+- `contract`: The contract address.
+- `func_sig`: The function signature.
+- `signing_key`: The private key used for signing.
+
+**Returns:**
+
+- `input_text`: A dictionary of the form { "ciphertext": { "value": int[] }, "signature": bytes[] }
+
+### 9. `generate_rsa_keypair()`
 
 **Purpose:** Generates an RSA key pair.
 
@@ -238,7 +261,7 @@ private_key_bytes, public_key_bytes = generate_rsa_keypair()
 - `private_key_bytes`: The serialized private key.
 - `public_key_bytes`: The serialized public key.
 
-### 9. `encrypt_rsa(public_key_bytes, plaintext)`
+### 10. `encrypt_rsa(public_key_bytes, plaintext)`
 
 **Purpose:** Encrypts plaintext using RSA encryption with a provided public key.
 
@@ -257,7 +280,7 @@ ciphertext = encrypt_rsa(public_key_bytes, plaintext)
 
 - `ciphertext`: The encrypted message.
 
-### 10. `decrypt_rsa(private_key_bytes, ciphertext)`
+### 11. `decrypt_rsa(private_key_bytes, ciphertext)`
 
 **Purpose:** Decrypts ciphertext using RSA decryption with a provided private key.
 
@@ -276,7 +299,7 @@ plaintext = decrypt_rsa(private_key_bytes, ciphertext)
 
 - `plaintext`: The decrypted message.
 
-### 11. `keccak256(data)`
+### 12. `keccak256(data)`
 
 **Purpose:** Computes the Keccak-256 hash of the provided data.
 
@@ -294,7 +317,7 @@ hash_value = keccak256(data)
 
 - `hash_value`: The computed hash.
 
-### 12. `get_func_sig(function_signature)`
+### 13. `get_func_sig(function_signature)`
 
 **Purpose:** Computes the function signature hash using Keccak-256.
 
@@ -312,7 +335,7 @@ func_sig_hash = get_func_sig(function_signature)
 
 - `func_sig_hash`: The first 4 bytes of the computed hash.
 
-### 13. `decrypt_uint(ciphertext, user_key)`
+### 14. `decrypt_uint(ciphertext, user_key)`
 
 **Purpose:** Decrypts a value stored in a contract using a user key
 
@@ -331,7 +354,7 @@ plaintext = decrypt_uint(ciphertext, user_key)
 
 - `result`: The decrypted value.
 
-### 14. `decrypt_string(ciphertext, user_key)`
+### 15. `decrypt_string(ciphertext, user_key)`
 
 **Purpose:** Decrypts a value stored in a contract using a user key
 
@@ -343,7 +366,7 @@ plaintext = decrypt_string(ciphertext, user_key)
 
 **Parameters:**
 
-- `ciphertext`: The value to be decrypted.
+- `ciphertext`: A dictionary of the form { "value": int[] } where each cell holds up to 8 characters (padded at the end with zeroes) encrypted
 - `userKey`: The user's AES key.
 
 **Returns:**
