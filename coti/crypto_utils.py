@@ -1,5 +1,5 @@
+from attributedict.collections import AttributeDict
 from Crypto.Cipher import AES
-from Crypto.Hash import keccak
 from Crypto.Random import get_random_bytes
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives import serialization
@@ -10,7 +10,7 @@ from math import ceil
 
 block_size = AES.block_size
 address_size = 20
-func_sig_size = 4
+function_selector_size = 4
 ct_size = 32
 key_size = 32
 
@@ -74,14 +74,16 @@ def generate_aes_key():
     return key
 
 
-def sign_input_text(sender, addr, func_sig, ct, key):
+def sign_input_text(sender, addr, function_selector, ct, key):
+    function_selector_bytes = bytes.fromhex(function_selector[2:])
+
     # Ensure all input sizes are the correct length
     if len(sender) != address_size:
         raise ValueError(f"Invalid sender address length: {len(sender)} bytes, must be {address_size} bytes")
     if len(addr) != address_size:
         raise ValueError(f"Invalid contract address length: {len(addr)} bytes, must be {address_size} bytes")
-    if len(func_sig) != func_sig_size:
-        raise ValueError(f"Invalid signature size: {len(func_sig)} bytes, must be {func_sig_size} bytes")
+    if len(function_selector_bytes) != function_selector_size:
+        raise ValueError(f"Invalid signature size: {len(function_selector_bytes)} bytes, must be {function_selector_size} bytes")
     if len(ct) != ct_size:
         raise ValueError(f"Invalid ct length: {len(ct)} bytes, must be {ct_size} bytes")
     # Ensure the key is the correct length
@@ -89,7 +91,7 @@ def sign_input_text(sender, addr, func_sig, ct, key):
         raise ValueError(f"Invalid key length: {len(key)} bytes, must be {key_size} bytes")
 
     # Create the message to be signed by appending all inputs
-    message = sender + addr + func_sig + ct
+    message = sender + addr + function_selector_bytes + ct
 
     return sign(message, key)
 
@@ -102,7 +104,7 @@ def sign(message, key):
     return signature
 
 
-def build_input_text(plaintext, user_aes_key, sender, contract, func_sig, signing_key):
+def build_input_text(plaintext, user_aes_key, sender, contract, function_selector, signing_key):
     sender_address_bytes = bytes.fromhex(sender.address[2:])
     contract_address_bytes = bytes.fromhex(contract.address[2:])
 
@@ -113,10 +115,8 @@ def build_input_text(plaintext, user_aes_key, sender, contract, func_sig, signin
     ciphertext, r = encrypt(user_aes_key, plaintext_bytes)
     ct = ciphertext + r
 
-    # Create the function signature
-    func_hash = get_func_sig(func_sig)
     # Sign the message
-    signature = sign_input_text(sender_address_bytes, contract_address_bytes, func_hash, ct, signing_key)
+    signature = sign_input_text(sender_address_bytes, contract_address_bytes, function_selector, ct, signing_key)
 
     # Convert the ct to an integer
     int_cipher_text = int.from_bytes(ct, byteorder='big')
@@ -124,7 +124,7 @@ def build_input_text(plaintext, user_aes_key, sender, contract, func_sig, signin
     return int_cipher_text, signature
 
 
-def build_string_input_text(plaintext, user_aes_key, sender, contract, func_sig, signing_key):
+def build_string_input_text(plaintext, user_aes_key, sender, contract, function_selector, signing_key):
     input_text = {
         'ciphertext': {
             'value': []
@@ -145,7 +145,7 @@ def build_string_input_text(plaintext, user_aes_key, sender, contract, func_sig,
             user_aes_key,
             sender,
             contract,
-            func_sig,
+            function_selector,
             signing_key
         )
 
@@ -173,10 +173,13 @@ def decrypt_uint(ciphertext, user_key):
 
 
 def decrypt_string(ciphertext, user_key):
+    print(ciphertext)
+
     decrypted_string = ""
 
     for value in ciphertext['value']:
         decrypted = decrypt_uint(value, user_key)
+
         byte_length = (decrypted.bit_length() + 7) // 8  # calculate the byte length
 
         # Convert the integer to bytes
@@ -225,26 +228,3 @@ def decrypt_rsa(private_key_bytes, ciphertext):
         )
     )
     return plaintext
-
-
-# Function to compute Keccak-256 hash
-def keccak256(data):
-    # Create Keccak-256 hash object
-    hash_obj = keccak.new(digest_bits=256)
-
-    # Update hash object with data
-    hash_obj.update(data)
-
-    # Compute hash and return
-    return hash_obj.digest()
-
-
-def get_func_sig(function_signature):
-    # Convert function signature to bytes
-    function_signature_bytes = function_signature.encode('utf-8')
-
-    # Compute Keccak-256 hash on the function signature
-    function_signature_bytes_hash = keccak256(function_signature_bytes)
-
-    # Take first 4 bytes of the hash
-    return function_signature_bytes_hash[:4]

@@ -11,7 +11,7 @@ setup(
     url='https://github.com/coti-io/coti-sdk-python',
     keywords='COTI SDK Privacy',
     install_requires=[
-        'pycryptodome==3.19.0', 'cryptography==3.4.8', 'eth-keys==0.4.0', 'eth-account==0.10.0', 'web3==6.11.2'
+        'pycryptodome==3.19.0', 'cryptography==3.4.8', 'eth-keys==0.4.0', 'eth-account==0.10.0', 'web3==6.11.2', 'attributedict==0.3.0'
     ],
     python_requires=">=3.9",
 )
