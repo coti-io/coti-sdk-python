@@ -1,6 +1,3 @@
-import binascii
-from array import array
-
 from Crypto.Cipher import AES
 from Crypto.Hash import keccak
 from Crypto.Random import get_random_bytes
@@ -9,6 +6,7 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.asymmetric import rsa
 from eth_keys import keys
+from math import ceil
 
 block_size = AES.block_size
 address_size = 20
@@ -24,6 +22,7 @@ def encrypt(key, plaintext):
 
     # Ensure key size is 128 bits (16 bytes)
     if len(key) != block_size:
+        print(len(key), block_size)
         raise ValueError("Key size must be 128 bits.")
 
     # Create a new AES cipher block using the provided key
@@ -126,14 +125,34 @@ def build_input_text(plaintext, user_aes_key, sender, contract, func_sig, signin
 
 
 def build_string_input_text(plaintext, user_aes_key, sender, contract, func_sig, signing_key):
-    encoded_plaintext = array('B', plaintext.encode('utf-8'))
-    encrypted_str = [{'ciphertext': 0, 'signature': b''} for _ in range(len(encoded_plaintext))]
-    for i in range(len(encoded_plaintext)):
-        ct_int, signature = build_input_text(int(encoded_plaintext[i]), user_aes_key, sender, contract,
-                                             func_sig, signing_key)
-        encrypted_str[i] = {'ciphertext': ct_int, 'signature': signature}
+    input_text = {
+        'ciphertext': {
+            'value': []
+        },
+        'signature': []
+    }
 
-    return encrypted_str
+    encoded_plaintext = bytearray(list(plaintext.encode('utf-8')))
+
+    for i in range(ceil(len(encoded_plaintext) / 8)):
+        start_idx = i * 8
+        end_idx = min(start_idx + 8, len(encoded_plaintext))
+
+        byte_arr = encoded_plaintext[start_idx:end_idx] + bytearray(8 - (end_idx - start_idx))
+
+        ct_int, sig = build_input_text(
+            int.from_bytes(byte_arr, 'big'),
+            user_aes_key,
+            sender,
+            contract,
+            func_sig,
+            signing_key
+        )
+
+        input_text['ciphertext']['value'].append(ct_int)
+        input_text['signature'].append(sig)
+    
+    return input_text
 
 
 def decrypt_uint(ciphertext, user_key):
@@ -154,18 +173,19 @@ def decrypt_uint(ciphertext, user_key):
 
 
 def decrypt_string(ciphertext, user_key):
-    string_from_input_tx = ""
-    for input_text_from_tx in ciphertext:
-        decrypted_input_from_tx = decrypt_uint(input_text_from_tx, user_key)
-        byte_length = (decrypted_input_from_tx.bit_length() + 7) // 8  # calculate the byte length
+    decrypted_string = ""
+
+    for value in ciphertext['value']:
+        decrypted = decrypt_uint(value, user_key)
+        byte_length = (decrypted.bit_length() + 7) // 8  # calculate the byte length
 
         # Convert the integer to bytes
-        decrypted_bytes = decrypted_input_from_tx.to_bytes(byte_length, byteorder='big')
+        decrypted_bytes = decrypted.to_bytes(byte_length, byteorder='big')
 
         # Decode the bytes to a string
-        string_from_input_tx += decrypted_bytes.decode('utf-8')
-
-    return string_from_input_tx
+        decrypted_string += decrypted_bytes.decode('utf-8')
+    
+    return decrypted_string.strip('\0')
 
 
 def generate_rsa_keypair():
