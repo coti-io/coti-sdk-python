@@ -120,7 +120,10 @@ def build_input_text(plaintext, user_aes_key, sender, contract, function_selecto
     # Convert the ct to an integer
     int_cipher_text = int.from_bytes(ct, byteorder='big')
 
-    return int_cipher_text, signature
+    return {
+        'ciphertext': int_cipher_text,
+        'signature': signature
+    }
 
 
 def build_string_input_text(plaintext, user_aes_key, sender, contract, function_selector, signing_key):
@@ -139,7 +142,7 @@ def build_string_input_text(plaintext, user_aes_key, sender, contract, function_
 
         byte_arr = encoded_plaintext[start_idx:end_idx] + bytearray(8 - (end_idx - start_idx))
 
-        ct_int, sig = build_input_text(
+        it_int = build_input_text(
             int.from_bytes(byte_arr, 'big'),
             user_aes_key,
             sender,
@@ -148,8 +151,8 @@ def build_string_input_text(plaintext, user_aes_key, sender, contract, function_
             signing_key
         )
 
-        input_text['ciphertext']['value'].append(ct_int)
-        input_text['signature'].append(sig)
+        input_text['ciphertext']['value'].append(it_int['ciphertext'])
+        input_text['signature'].append(it_int['signature'])
     
     return input_text
 
