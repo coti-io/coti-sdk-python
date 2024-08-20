@@ -1,18 +1,16 @@
-import binascii
-from array import array
-
 from Crypto.Cipher import AES
-from Crypto.Hash import keccak
 from Crypto.Random import get_random_bytes
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.asymmetric import rsa
 from eth_keys import keys
+from math import ceil
+from web3 import Web3
 
 block_size = AES.block_size
 address_size = 20
-func_sig_size = 4
+function_selector_size = 4
 ct_size = 32
 key_size = 32
 
@@ -24,6 +22,7 @@ def encrypt(key, plaintext):
 
     # Ensure key size is 128 bits (16 bytes)
     if len(key) != block_size:
+        print(len(key), block_size)
         raise ValueError("Key size must be 128 bits.")
 
     # Create a new AES cipher block using the provided key
@@ -75,14 +74,16 @@ def generate_aes_key():
     return key
 
 
-def sign_input_text(sender, addr, func_sig, ct, key):
+def sign_input_text(sender, addr, function_selector, ct, key):
+    function_selector_bytes = bytes.fromhex(function_selector[2:])
+
     # Ensure all input sizes are the correct length
     if len(sender) != address_size:
         raise ValueError(f"Invalid sender address length: {len(sender)} bytes, must be {address_size} bytes")
     if len(addr) != address_size:
         raise ValueError(f"Invalid contract address length: {len(addr)} bytes, must be {address_size} bytes")
-    if len(func_sig) != func_sig_size:
-        raise ValueError(f"Invalid signature size: {len(func_sig)} bytes, must be {func_sig_size} bytes")
+    if len(function_selector_bytes) != function_selector_size:
+        raise ValueError(f"Invalid signature size: {len(function_selector_bytes)} bytes, must be {function_selector_size} bytes")
     if len(ct) != ct_size:
         raise ValueError(f"Invalid ct length: {len(ct)} bytes, must be {ct_size} bytes")
     # Ensure the key is the correct length
@@ -90,7 +91,7 @@ def sign_input_text(sender, addr, func_sig, ct, key):
         raise ValueError(f"Invalid key length: {len(key)} bytes, must be {key_size} bytes")
 
     # Create the message to be signed by appending all inputs
-    message = sender + addr + func_sig + ct
+    message = sender + addr + function_selector_bytes + ct
 
     return sign(message, key)
 
@@ -103,7 +104,7 @@ def sign(message, key):
     return signature
 
 
-def build_input_text(plaintext, user_aes_key, sender, contract, func_sig, signing_key):
+def build_input_text(plaintext, user_aes_key, sender, contract, function_selector, signing_key):
     sender_address_bytes = bytes.fromhex(sender.address[2:])
     contract_address_bytes = bytes.fromhex(contract.address[2:])
 
@@ -114,26 +115,88 @@ def build_input_text(plaintext, user_aes_key, sender, contract, func_sig, signin
     ciphertext, r = encrypt(user_aes_key, plaintext_bytes)
     ct = ciphertext + r
 
-    # Create the function signature
-    func_hash = get_func_sig(func_sig)
     # Sign the message
-    signature = sign_input_text(sender_address_bytes, contract_address_bytes, func_hash, ct, signing_key)
+    signature = sign_input_text(sender_address_bytes, contract_address_bytes, function_selector, ct, signing_key)
 
     # Convert the ct to an integer
     int_cipher_text = int.from_bytes(ct, byteorder='big')
 
-    return int_cipher_text, signature
+    return {
+        'ciphertext': int_cipher_text,
+        'signature': signature
+    }
 
 
-def build_string_input_text(plaintext, user_aes_key, sender, contract, func_sig, signing_key):
-    encoded_plaintext = array('B', plaintext.encode('utf-8'))
-    encrypted_str = [{'ciphertext': 0, 'signature': b''} for _ in range(len(encoded_plaintext))]
-    for i in range(len(encoded_plaintext)):
-        ct_int, signature = build_input_text(int(encoded_plaintext[i]), user_aes_key, sender, contract,
-                                             func_sig, signing_key)
-        encrypted_str[i] = {'ciphertext': ct_int, 'signature': signature}
+def build_string_input_text(plaintext, user_aes_key, sender, contract, function_selector, signing_key):
+    input_text = {
+        'ciphertext': {
+            'value': []
+        },
+        'signature': []
+    }
 
-    return encrypted_str
+    encoded_plaintext = bytearray(list(plaintext.encode('utf-8')))
+
+    for i in range(ceil(len(encoded_plaintext) / 8)):
+        start_idx = i * 8
+        end_idx = min(start_idx + 8, len(encoded_plaintext))
+
+        byte_arr = encoded_plaintext[start_idx:end_idx] + bytearray(8 - (end_idx - start_idx))
+
+        it_int = build_input_text(
+            int.from_bytes(byte_arr, 'big'),
+            user_aes_key,
+            sender,
+            contract,
+            function_selector,
+            signing_key
+        )
+
+        input_text['ciphertext']['value'].append(it_int['ciphertext'])
+        input_text['signature'].append(it_int['signature'])
+    
+    return input_text
+
+def build_address_input_text(plaintext, user_aes_key, sender, contract, function_selector, signing_key):
+    it_int_1 = build_input_text(
+        int(plaintext[2:18], 16), # bytes 1 - 8
+        user_aes_key,
+        sender,
+        contract,
+        function_selector,
+        signing_key
+    )
+
+    it_int_2 = build_input_text(
+        int(plaintext[18:34], 16), # bytes 9 - 16
+        user_aes_key,
+        sender,
+        contract,
+        function_selector,
+        signing_key
+    )
+
+    it_int_3 = build_input_text(
+        int(plaintext[34:42], 16), # bytes 17 - 20
+        user_aes_key,
+        sender,
+        contract,
+        function_selector,
+        signing_key
+    )
+    
+    input_text = {
+        'ciphertext': {
+            'ct1': it_int_1['ciphertext'],
+            'ct2': it_int_2['ciphertext'],
+            'ct3': it_int_3['ciphertext']
+        },
+        'signature1': it_int_1['signature'],
+        'signature2': it_int_2['signature'],
+        'signature3': it_int_3['signature']
+    }
+    
+    return input_text
 
 
 def decrypt_uint(ciphertext, user_key):
@@ -154,18 +217,49 @@ def decrypt_uint(ciphertext, user_key):
 
 
 def decrypt_string(ciphertext, user_key):
-    string_from_input_tx = ""
-    for input_text_from_tx in ciphertext:
-        decrypted_input_from_tx = decrypt_uint(input_text_from_tx, user_key)
-        byte_length = (decrypted_input_from_tx.bit_length() + 7) // 8  # calculate the byte length
+    if 'value' in ciphertext or hasattr(ciphertext, 'value'): # format when reading ciphertext from an event
+        __ciphertext = ciphertext['value']
+    elif isinstance(ciphertext, tuple): # format when reading ciphertext from state variable
+        __ciphertext = ciphertext[0]
+    else:
+        raise RuntimeError('Unrecognized ciphertext format')
+
+    decrypted_string = ""
+
+    for value in __ciphertext:
+        decrypted = decrypt_uint(value, user_key)
+
+        byte_length = (decrypted.bit_length() + 7) // 8  # calculate the byte length
 
         # Convert the integer to bytes
-        decrypted_bytes = decrypted_input_from_tx.to_bytes(byte_length, byteorder='big')
+        decrypted_bytes = decrypted.to_bytes(byte_length, byteorder='big')
 
         # Decode the bytes to a string
-        string_from_input_tx += decrypted_bytes.decode('utf-8')
+        decrypted_string += decrypted_bytes.decode('utf-8')
+    
+    return decrypted_string.strip('\0')
 
-    return string_from_input_tx
+def decrypt_address(ciphertext, user_key):
+    if isinstance(ciphertext, list): # format when reading ciphertext from a state variable
+        __ciphertext = ciphertext
+    else: # format when reading ciphertext from an event
+        __ciphertext = list(ciphertext.values())
+
+    addr = '0x'
+    
+    decrypted = decrypt_uint(__ciphertext[0], user_key)
+
+    addr += hex(decrypted)[2:].rjust(16, '0') # 8 bytes is 16 characters
+
+    decrypted = decrypt_uint(__ciphertext[1], user_key)
+
+    addr += hex(decrypted)[2:].rjust(16, '0') # 8 bytes is 16 characters
+
+    decrypted = decrypt_uint(__ciphertext[2], user_key)
+
+    addr += hex(decrypted)[2:].rjust(8, '0') # 4 bytes is 8 characters
+    
+    return Web3.to_checksum_address(addr)
 
 
 def generate_rsa_keypair():
@@ -205,26 +299,3 @@ def decrypt_rsa(private_key_bytes, ciphertext):
         )
     )
     return plaintext
-
-
-# Function to compute Keccak-256 hash
-def keccak256(data):
-    # Create Keccak-256 hash object
-    hash_obj = keccak.new(digest_bits=256)
-
-    # Update hash object with data
-    hash_obj.update(data)
-
-    # Compute hash and return
-    return hash_obj.digest()
-
-
-def get_func_sig(function_signature):
-    # Convert function signature to bytes
-    function_signature_bytes = function_signature.encode('utf-8')
-
-    # Compute Keccak-256 hash on the function signature
-    function_signature_bytes_hash = keccak256(function_signature_bytes)
-
-    # Take first 4 bytes of the hash
-    return function_signature_bytes_hash[:4]
