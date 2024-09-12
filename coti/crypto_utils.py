@@ -206,6 +206,15 @@ def decrypt_rsa(private_key_bytes, ciphertext):
     )
     return plaintext
 
+#This function recovers a user's key by decrypting two encrypted key shares with the given private key,
+#and then XORing the two key shares together.
+def recover_user_key(private_key_bytes, encrypted_key_share0, encrypted_key_share1):
+    key_share0 = decrypt_rsa(private_key_bytes, encrypted_key_share0)
+    key_share1 = decrypt_rsa(private_key_bytes, encrypted_key_share1)
+
+    # XOR both key shares to get the user key
+    return bytes([a ^ b for a, b in zip(key_share0, key_share1)])
+
 
 # Function to compute Keccak-256 hash
 def keccak256(data):
