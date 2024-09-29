@@ -246,7 +246,30 @@ int_cipher_text, signature = build_string_input_text(plaintext, user_aes_key, se
 
 - `input_text`: A dictionary of the form { "ciphertext": { "value": int[] }, "signature": bytes[] }
 
-### 9. `generate_rsa_keypair()`
+### 9. `build_address_input_text(plaintext, user_aes_key, sender, contract, func_selector, signing_key)`
+
+**Purpose:** Builds input text by encrypting the plaintext and signing it.
+
+**Usage:**
+
+```python
+int_cipher_text, signature = build_address_input_text(plaintext, user_aes_key, sender, contract, func_selector, signing_key)
+```
+
+**Parameters:**
+
+- `plaintext`: The plaintext message.
+- `user_aes_key`: The user's AES key.
+- `sender`: The sender's address.
+- `contract`: The contract address.
+- `func_selector`: The function selector.
+- `signing_key`: The private key used for signing.
+
+**Returns:**
+
+- `input_text`: A dictionary of the form { "ciphertext": { "ct1": int, "ct2": int, "ct3": int }, "signature1": bytes, "signature2": bytes, "signature3": bytes }
+
+### 10. `generate_rsa_keypair()`
 
 **Purpose:** Generates an RSA key pair.
 
@@ -261,7 +284,7 @@ private_key_bytes, public_key_bytes = generate_rsa_keypair()
 - `private_key_bytes`: The serialized private key.
 - `public_key_bytes`: The serialized public key.
 
-### 10. `encrypt_rsa(public_key_bytes, plaintext)`
+### 11. `encrypt_rsa(public_key_bytes, plaintext)`
 
 **Purpose:** Encrypts plaintext using RSA encryption with a provided public key.
 
@@ -280,7 +303,7 @@ ciphertext = encrypt_rsa(public_key_bytes, plaintext)
 
 - `ciphertext`: The encrypted message.
 
-### 11. `decrypt_rsa(private_key_bytes, ciphertext)`
+### 12. `decrypt_rsa(private_key_bytes, ciphertext)`
 
 **Purpose:** Decrypts ciphertext using RSA decryption with a provided private key.
 
@@ -299,7 +322,7 @@ plaintext = decrypt_rsa(private_key_bytes, ciphertext)
 
 - `plaintext`: The decrypted message.
 
-### 12. `decrypt_uint(ciphertext, user_key)`
+### 13. `decrypt_uint(ciphertext, user_key)`
 
 **Purpose:** Decrypts a value stored in a contract using a user key
 
@@ -318,7 +341,7 @@ plaintext = decrypt_uint(ciphertext, user_key)
 
 - `result`: The decrypted value.
 
-### 13. `decrypt_string(ciphertext, user_key)`
+### 14. `decrypt_string(ciphertext, user_key)`
 
 **Purpose:** Decrypts a value stored in a contract using a user key
 
@@ -336,6 +359,25 @@ plaintext = decrypt_string(ciphertext, user_key)
 **Returns:**
 
 - `result`: The decrypted value.
+
+### 15. `decrypt_address(ciphertext, user_key)`
+
+**Purpose:** Decrypts a value stored in a contract and encrypted using a user key
+
+**Usage:**
+
+```python
+plaintext = decrypt_string(ciphertext, user_key)
+```
+
+**Parameters:**
+
+- `ciphertext`: A dictionary of the form { "ct1": int, "ct2": int, "ct3": int } where each cell holds a portion of the address encrypted
+- `userKey`: The user's AES key.
+
+**Returns:**
+
+- `result`: The decrypted address.
 
 # Utilities (utils.py) Functions
 

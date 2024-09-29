@@ -5,6 +5,7 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.asymmetric import rsa
 from eth_keys import keys
+from web3 import Web3
 
 block_size = AES.block_size
 address_size = 20
@@ -153,6 +154,50 @@ def build_string_input_text(plaintext, user_aes_key, sender, contract, function_
     
     return input_text
 
+def build_address_input_text(plaintext, user_aes_key, sender, contract, function_selector, signing_key):
+    if not Web3.is_address(plaintext):
+        raise ValueError("Plaintext must be a valid address.")
+
+    it_int_1 = build_input_text(
+        int(plaintext[2:18], 16), # bytes 1 - 8
+        user_aes_key,
+        sender,
+        contract,
+        function_selector,
+        signing_key
+    )
+
+    it_int_2 = build_input_text(
+        int(plaintext[18:34], 16), # bytes 9 - 16
+        user_aes_key,
+        sender,
+        contract,
+        function_selector,
+        signing_key
+    )
+
+    it_int_3 = build_input_text(
+        int(plaintext[34:42], 16), # bytes 17 - 20
+        user_aes_key,
+        sender,
+        contract,
+        function_selector,
+        signing_key
+    )
+    
+    input_text = {
+        'ciphertext': {
+            'ct1': it_int_1['ciphertext'],
+            'ct2': it_int_2['ciphertext'],
+            'ct3': it_int_3['ciphertext']
+        },
+        'signature1': it_int_1['signature'],
+        'signature2': it_int_2['signature'],
+        'signature3': it_int_3['signature']
+    }
+    
+    return input_text
+
 
 def decrypt_uint(ciphertext, user_key):
     # Convert ct to bytes (big-endian)
@@ -193,6 +238,28 @@ def decrypt_string(ciphertext, user_key):
         decrypted_string += decrypted_bytes.decode('utf-8')
     
     return decrypted_string.strip('\0')
+
+def decrypt_address(ciphertext, user_key):
+    if isinstance(ciphertext, list): # format when reading ciphertext from a state variable
+        __ciphertext = ciphertext
+    else: # format when reading ciphertext from an event
+        __ciphertext = list(ciphertext.values())
+
+    addr = '0x'
+    
+    decrypted = decrypt_uint(__ciphertext[0], user_key)
+
+    addr += hex(decrypted)[2:].rjust(16, '0') # 8 bytes is 16 characters
+
+    decrypted = decrypt_uint(__ciphertext[1], user_key)
+
+    addr += hex(decrypted)[2:].rjust(16, '0') # 8 bytes is 16 characters
+
+    decrypted = decrypt_uint(__ciphertext[2], user_key)
+
+    addr += hex(decrypted)[2:].rjust(8, '0') # 4 bytes is 8 characters
+    
+    return Web3.to_checksum_address(addr)
 
 
 def generate_rsa_keypair():
