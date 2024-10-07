@@ -111,14 +111,6 @@ def is_gas_units_estimation_valid(web3, tx):
     return False, estimate_gas
 
 
-def get_function_signature(function_abi):
-    # Extract the input types from the ABI
-    input_types = ','.join([param['type'] for param in function_abi.get('inputs', [])])
-
-    # Generate the function signature
-    return f"{function_abi['name']}({input_types})"
-
-
 def deploy_contract(contract, kwargs, tx_params):
     func = contract.constructor(**kwargs)
     return exec_func_via_transaction(func, tx_params)
