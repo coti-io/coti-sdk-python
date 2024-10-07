@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='coti_sdk',
     description='COTI SDK for Privacy Preserving Network',
-    version='v0.1.14',
+    version='v1.0.2',
     license='Apache2.0',
     author="gmesika-coti@COTI",
     author_email='support@coti.io',
