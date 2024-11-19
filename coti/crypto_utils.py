@@ -4,7 +4,9 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.asymmetric import rsa
+from eth_account import Account
 from eth_keys import keys
+from .types import ItString, ItUint
 
 block_size = AES.block_size
 address_size = 20
@@ -71,7 +73,7 @@ def generate_aes_key():
     return key
 
 
-def sign_input_text(sender, addr, function_selector, ct, key):
+def sign_input_text(sender: Account, addr: str, function_selector: str, ct, key):
     function_selector_bytes = bytes.fromhex(function_selector[2:])
 
     # Ensure all input sizes are the correct length
@@ -101,7 +103,7 @@ def sign(message, key):
     return signature
 
 
-def build_input_text(plaintext, user_aes_key, sender, contract, function_selector, signing_key):
+def build_input_text(plaintext: int, user_aes_key, sender: Account, contract, function_selector: str, signing_key) -> ItUint:
     sender_address_bytes = bytes.fromhex(sender.address[2:])
     contract_address_bytes = bytes.fromhex(contract.address[2:])
 
@@ -124,7 +126,7 @@ def build_input_text(plaintext, user_aes_key, sender, contract, function_selecto
     }
 
 
-def build_string_input_text(plaintext, user_aes_key, sender, contract, function_selector, signing_key):
+def build_string_input_text(plaintext, user_aes_key, sender, contract, function_selector, signing_key) -> ItString:
     input_text = {
         'ciphertext': {
             'value': []
@@ -154,7 +156,7 @@ def build_string_input_text(plaintext, user_aes_key, sender, contract, function_
     return input_text
 
 
-def decrypt_uint(ciphertext, user_key):
+def decrypt_uint(ciphertext, user_key) -> int:
     # Convert ct to bytes (big-endian)
     byte_array = ciphertext.to_bytes(32, byteorder='big')
 
@@ -171,7 +173,7 @@ def decrypt_uint(ciphertext, user_key):
     return decrypted_uint
 
 
-def decrypt_string(ciphertext, user_key):
+def decrypt_string(ciphertext, user_key) -> str:
     if 'value' in ciphertext or hasattr(ciphertext, 'value'): # format when reading ciphertext from an event
         __ciphertext = ciphertext['value']
     elif isinstance(ciphertext, tuple): # format when reading ciphertext from state variable
