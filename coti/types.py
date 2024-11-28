@@ -4,8 +4,7 @@ CtBool: TypeAlias = int
 
 CtUint: TypeAlias = int
 
-class CtString(TypedDict):
-    value: List[int]
+CtString: TypeAlias = tuple[List[int]]
 
 class ItBool(TypedDict):
     ciphertext: int
@@ -15,6 +14,9 @@ class ItUint(TypedDict):
     ciphertext: int
     signature: bytes
 
-class ItString(TypedDict):
-    ciphertext: CtString
+class ItStringCiphertext(TypedDict):
+    value: List[int]
+
+class ItString(TypedDict): 
+    ciphertext: ItStringCiphertext
     signature: List[bytes]

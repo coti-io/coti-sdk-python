@@ -5,7 +5,7 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.asymmetric import rsa
 from eth_keys import keys
-from .types import ItString, ItUint
+from .types import CtString, CtUint, ItString, ItUint
 
 block_size = AES.block_size
 address_size = 20
@@ -152,7 +152,7 @@ def build_string_input_text(plaintext: int, user_aes_key: str, sender_address: s
     return input_text
 
 
-def decrypt_uint(ciphertext: int, user_aes_key: str) -> int:
+def decrypt_uint(ciphertext: CtUint, user_aes_key: str) -> int:
     # Convert ct to bytes (big-endian)
     byte_array = ciphertext.to_bytes(32, byteorder='big')
 
@@ -169,7 +169,7 @@ def decrypt_uint(ciphertext: int, user_aes_key: str) -> int:
     return decrypted_uint
 
 
-def decrypt_string(ciphertext: int, user_aes_key: str) -> str:
+def decrypt_string(ciphertext: CtString, user_aes_key: str) -> str:
     if 'value' in ciphertext or hasattr(ciphertext, 'value'): # format when reading ciphertext from an event
         __ciphertext = ciphertext['value']
     elif isinstance(ciphertext, tuple): # format when reading ciphertext from state variable
