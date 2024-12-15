@@ -8,7 +8,7 @@ setup(
     description='COTI SDK for Privacy Preserving Network',
     long_description=long_description,
     long_description_content_type="text/markdown",
-    version='0.0.0',
+    version='v1.0.6',
     license='Apache2.0',
     author="COTI Development",
     author_email='dev@coti.io',
